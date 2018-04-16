@@ -1,0 +1,605 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     23608,        596]
+NotebookOptionsPosition[     22763,        564]
+NotebookOutlinePosition[     23118,        580]
+CellTagsIndexPosition[     23075,        577]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Get", "[", "\"\<RealizeClique.m\>\"", "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.585941903661516*^9, 3.5859419097618217`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"G", "=", 
+  RowBox[{"Graph", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"1", "<->", "3"}], ",", 
+      RowBox[{"1", "<->", "4"}], ",", 
+      RowBox[{"1", "<->", "5"}], ",", 
+      RowBox[{"2", "<->", "3"}], ",", 
+      RowBox[{"2", "<->", "4"}], ",", 
+      RowBox[{"2", "<->", "5"}], ",", 
+      RowBox[{"3", "<->", "4"}], ",", 
+      RowBox[{"3", "<->", "5"}], ",", 
+      RowBox[{"4", "<->", "5"}]}], "}"}], ",", 
+    RowBox[{"EdgeWeight", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "1", ",", "1", ",", "0.7", ",", "0.7", ",", "0.7", ",", "1", 
+       ",", "1", ",", "1"}], "}"}]}]}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"A", "=", 
+   RowBox[{"Normal", "[", 
+    RowBox[{"WeightedAdjacencyMatrix", "[", "G", "]"}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"n", "=", 
+   RowBox[{"Length", "[", "A", "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"zvars", "=", 
+   RowBox[{"Array", "[", 
+    RowBox[{"w", ",", 
+     RowBox[{"{", 
+      RowBox[{"n", ",", "n"}], "}"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"z", "=", 
+   RowBox[{"CayleyMengerVarsSymbolic", "[", 
+    RowBox[{"A", ",", "zvars"}], "]"}]}], ";"}], "\n", 
+ RowBox[{"sol", "=", 
+  RowBox[{"Select", "[", 
+   RowBox[{
+    RowBox[{"Flatten", "[", 
+     RowBox[{"z", "/.", 
+      RowBox[{"Solve", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"CayleyMengerDeterminantSymbolic", "[", 
+          RowBox[{"A", ",", "zvars"}], "]"}], "\[Equal]", "0"}], ",", "z"}], 
+       "]"}]}], "]"}], ",", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"#", "\[GreaterEqual]", "0"}], ")"}], "&"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ewl", "=", 
+   RowBox[{"EdgeWeightList", "[", "A", "]"}]}], ";", 
+  RowBox[{"ewl2", "=", 
+   RowBox[{"Map", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"ReplacePart", "[", 
+        RowBox[{"ewl", ",", 
+         RowBox[{
+          RowBox[{"Position", "[", 
+           RowBox[{"ewl", ",", "0"}], "]"}], "\[Rule]", "#"}]}], "]"}], ")"}],
+       "&"}], ",", "sol"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"CG", "=", 
+   RowBox[{"Map", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"CompleteGraph", "[", 
+        RowBox[{"n", ",", 
+         RowBox[{"EdgeWeight", "\[Rule]", 
+          RowBox[{"ReplacePart", "[", 
+           RowBox[{"ewl", ",", 
+            RowBox[{
+             RowBox[{"Position", "[", 
+              RowBox[{"ewl", ",", "0"}], "]"}], "\[Rule]", "#"}]}], "]"}]}]}],
+         "]"}], ")"}], "&"}], ",", "sol"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"X", "=", 
+   RowBox[{"Map", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Take", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"n", "-", "2"}]}], "]"}], "&"}], ",", 
+     RowBox[{"Map", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"RealizeClique", "[", "#", "]"}], "&"}], ",", "CG"}], "]"}], 
+     ",", 
+     RowBox[{"{", "2", "}"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{"Map", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"GraphPlot3D", "[", 
+     RowBox[{"G", ",", 
+      RowBox[{"VertexLabeling", "\[Rule]", "True"}], ",", 
+      RowBox[{"VertexCoordinateRules", "\[Rule]", "#"}]}], "]"}], "&"}], ",", 
+   "X"}], "]"}], "\n"}], "Input",
+ CellChangeTimes->{{3.5859418404481583`*^9, 3.585941840449738*^9}, {
+   3.5859425066431007`*^9, 3.585942528711227*^9}, 3.585942575334097*^9, {
+   3.585942636406332*^9, 3.585942688236598*^9}, {3.585942728721856*^9, 
+   3.5859427657437077`*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[
+  NamespaceBox["NetworkGraphics",
+   DynamicModuleBox[{Typeset`graph = HoldComplete[
+     Graph[{1, 3, 4, 5, 2}, {
+      Null, {{1, 2}, {1, 3}, {1, 4}, {5, 2}, {5, 3}, {5, 4}, {2, 3}, {2, 4}, {
+       3, 4}}}, {EdgeWeight -> {1, 1, 1, 0.7, 0.7, 0.7, 1, 1, 1}}]], 
+    Typeset`boxes, Typeset`boxes$s2d = GraphicsGroupBox[{{
+       Directive[
+        Opacity[0.7], 
+        Hue[0.6, 0.7, 0.5]], 
+       LineBox[{{
+          DynamicLocation["VertexID$1", Automatic, Center], 
+          DynamicLocation["VertexID$2", Automatic, Center]}, {
+          DynamicLocation["VertexID$1", Automatic, Center], 
+          DynamicLocation["VertexID$3", Automatic, Center]}, {
+          DynamicLocation["VertexID$1", Automatic, Center], 
+          DynamicLocation["VertexID$4", Automatic, Center]}, {
+          DynamicLocation["VertexID$2", Automatic, Center], 
+          DynamicLocation["VertexID$3", Automatic, Center]}, {
+          DynamicLocation["VertexID$2", Automatic, Center], 
+          DynamicLocation["VertexID$4", Automatic, Center]}, {
+          DynamicLocation["VertexID$2", Automatic, Center], 
+          DynamicLocation["VertexID$5", Automatic, Center]}, {
+          DynamicLocation["VertexID$3", Automatic, Center], 
+          DynamicLocation["VertexID$4", Automatic, Center]}, {
+          DynamicLocation["VertexID$3", Automatic, Center], 
+          DynamicLocation["VertexID$5", Automatic, Center]}, {
+          DynamicLocation["VertexID$4", Automatic, Center], 
+          DynamicLocation["VertexID$5", Automatic, Center]}}]}, {
+       Directive[
+        Hue[0.6, 0.2, 0.8], 
+        EdgeForm[
+         Directive[
+          GrayLevel[0], 
+          Opacity[0.7]]]], 
+       TagBox[
+        DiskBox[{0., 0.6036428791280587}, 0.021554178270612873`], 
+        "DynamicName", BoxID -> "VertexID$1"], 
+       TagBox[
+        DiskBox[{1.006943513923487, 0.}, 0.021554178270612873`], 
+        "DynamicName", BoxID -> "VertexID$2"], 
+       TagBox[
+        DiskBox[{0.8294432880449293, 0.6024873029730559}, 
+         0.021554178270612873`], "DynamicName", BoxID -> "VertexID$3"], 
+       TagBox[
+        DiskBox[{1.008260262516205, 1.2072356645553475`}, 
+         0.021554178270612873`], "DynamicName", BoxID -> "VertexID$4"], 
+       TagBox[
+        DiskBox[{1.8707672937283246`, 0.602648036371213}, 
+         0.021554178270612873`], "DynamicName", BoxID -> 
+        "VertexID$5"]}}], $CellContext`flag}, 
+    TagBox[
+     DynamicBox[GraphComputation`NetworkGraphicsBox[
+      3, Typeset`graph, Typeset`boxes, $CellContext`flag], {
+      CachedValue :> Typeset`boxes, SingleEvaluation -> True, 
+       SynchronousUpdating -> False, TrackedSymbols :> {$CellContext`flag}},
+      ImageSizeCache->{{6.1800000000000015`, 352.82}, {-116.10720000000003`, 
+       111.04774325351408`}}],
+     MouseAppearanceTag["NetworkGraphics"]],
+    AllowKernelInitialization->False,
+    UnsavedVariables:>{$CellContext`flag}]],
+  DefaultBaseStyle->{
+   "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> Hue[0.8, 1., 0.6]},
+  FrameTicks->None]], "Output",
+ CellChangeTimes->{
+  3.58594186182823*^9, 3.585941911423174*^9, 3.5859420165029593`*^9, 
+   3.5859425128762217`*^9, 3.585942582472474*^9, {3.585942756337941*^9, 
+   3.585942780377643*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"0.42068517802646216`", ",", "1.2123079838289899`"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{
+  3.58594186182823*^9, 3.585941911423174*^9, 3.5859420165029593`*^9, 
+   3.5859425128762217`*^9, 3.585942582472474*^9, {3.585942756337941*^9, 
+   3.585942780381838*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Solve", "::", "ratnz"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Solve was unable to solve the system with inexact \
+coefficients. The answer was obtained by solving a corresponding exact system \
+and numericizing the result. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/Solve\\\", ButtonNote -> \
+\\\"Solve::ratnz\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.585942582522933*^9, {3.585942756407728*^9, 3.585942780431116*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Solve", "::", "ratnz"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Solve was unable to solve the system with inexact \
+coefficients. The answer was obtained by solving a corresponding exact system \
+and numericizing the result. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/Solve\\\", ButtonNote -> \
+\\\"Solve::ratnz\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.585942582522933*^9, {3.585942756407728*^9, 3.5859427804874363`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Solve", "::", "ratnz"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Solve was unable to solve the system with inexact \
+coefficients. The answer was obtained by solving a corresponding exact system \
+and numericizing the result. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/Solve\\\", ButtonNote -> \
+\\\"Solve::ratnz\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.585942582522933*^9, {3.585942756407728*^9, 3.585942780545175*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \[NoBreak]\\!\\(\\*StyleBox[\\(Solve :: \
+ratnz\\), \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.585942582522933*^9, {3.585942756407728*^9, 3.585942780564375*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   Graphics3DBox[
+    TagBox[
+     GraphicsComplex3DBox[{{0., 0., 0.}, {1., 0., 0.}, {
+      0.5, -0.8660254037844386, 0.}, {
+      0.5, -0.2886751345948129, -0.816496580927726}, {
+      0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}}, {
+       {RGBColor[0.5, 0., 0.], 
+        Line3DBox[{{1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {2, 5}, {3, 4}, {3,
+          5}, {4, 5}}]}, {Text3DBox[
+         FrameBox["1",
+          Background->RGBColor[1, 1, 0.8],
+          FrameStyle->RGBColor[0.94, 0.85, 0.36],
+          StripOnInput->False], 1], Text3DBox[
+         FrameBox["2",
+          Background->RGBColor[1, 1, 0.8],
+          FrameStyle->RGBColor[0.94, 0.85, 0.36],
+          StripOnInput->False], 2], Text3DBox[
+         FrameBox["3",
+          Background->RGBColor[1, 1, 0.8],
+          FrameStyle->RGBColor[0.94, 0.85, 0.36],
+          StripOnInput->False], 3], Text3DBox[
+         FrameBox["4",
+          Background->RGBColor[1, 1, 0.8],
+          FrameStyle->RGBColor[0.94, 0.85, 0.36],
+          StripOnInput->False], 4], Text3DBox[
+         FrameBox["5",
+          Background->RGBColor[1, 1, 0.8],
+          FrameStyle->RGBColor[0.94, 0.85, 0.36],
+          StripOnInput->False], 5]}}],
+     Annotation[#, 
+      VertexCoordinateRules -> {{0., 0., 0.}, {1., 0., 0.}, {
+       0.5, -0.8660254037844386, 0.}, {
+       0.5, -0.2886751345948129, -0.816496580927726}, {
+       0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}}]& ],
+    
+    AspectRatio->Automatic,
+    AutomaticImageSize->True,
+    ImageSize->{181.34930154756216`, 186.2909309277371},
+    PlotRange->All,
+    PlotRangePadding->Scaled[0.1],
+    ViewPoint->{1.8189363511094698`, -2.0122860840803143`, 
+     2.0229125701397184`},
+    ViewVertical->{-0.06474651703287562, -0.058353440345980216`, 
+     1.2206068442778488`}], ",", 
+   Graphics3DBox[
+    TagBox[
+     GraphicsComplex3DBox[{{0., 0., 0.}, {1., 0., 0.}, {
+      0.5, -0.8660254037844386, 0.}, {
+      0.5, -0.2886751345948129, -0.816496580927726}, {
+      0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}}, {
+       {RGBColor[0.5, 0., 0.], 
+        Line3DBox[{{1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {2, 5}, {3, 4}, {3,
+          5}, {4, 5}}]}, {Text3DBox[
+         FrameBox["1",
+          Background->RGBColor[1, 1, 0.8],
+          FrameStyle->RGBColor[0.94, 0.85, 0.36],
+          StripOnInput->False], 1], Text3DBox[
+         FrameBox["2",
+          Background->RGBColor[1, 1, 0.8],
+          FrameStyle->RGBColor[0.94, 0.85, 0.36],
+          StripOnInput->False], 2], Text3DBox[
+         FrameBox["3",
+          Background->RGBColor[1, 1, 0.8],
+          FrameStyle->RGBColor[0.94, 0.85, 0.36],
+          StripOnInput->False], 3], Text3DBox[
+         FrameBox["4",
+          Background->RGBColor[1, 1, 0.8],
+          FrameStyle->RGBColor[0.94, 0.85, 0.36],
+          StripOnInput->False], 4], Text3DBox[
+         FrameBox["5",
+          Background->RGBColor[1, 1, 0.8],
+          FrameStyle->RGBColor[0.94, 0.85, 0.36],
+          StripOnInput->False], 5]}}],
+     Annotation[#, 
+      VertexCoordinateRules -> {{0., 0., 0.}, {1., 0., 0.}, {
+       0.5, -0.8660254037844386, 0.}, {
+       0.5, -0.2886751345948129, -0.816496580927726}, {
+       0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}}]& ],
+    AspectRatio->Automatic,
+    AutomaticImageSize->True,
+    ImageSize->{163.66746689509384`, 169.04187897164493`},
+    PlotRange->All,
+    PlotRangePadding->Scaled[0.1],
+    ViewPoint->{0.01689894244940715, -3.0096926750055615`, 
+     1.5464360406308306`},
+    ViewVertical->{-0.1771019416308205, -0.1930261036489907, 
+     1.1878703178923786`}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.58594186182823*^9, 3.585941911423174*^9, 3.5859420165029593`*^9, 
+   3.5859425128762217`*^9, 3.585942582472474*^9, {3.585942756337941*^9, 
+   3.585942780601863*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Map", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"GraphPlot3D", "[", 
+     RowBox[{"G", ",", 
+      RowBox[{"VertexLabeling", "\[Rule]", "False"}], ",", 
+      RowBox[{"VertexCoordinateRules", "\[Rule]", "#"}], ",", " ", 
+      RowBox[{"Axes", "\[Rule]", "True"}], ",", " ", 
+      RowBox[{"EdgeRenderingFunction", "\[Rule]", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"Cylinder", "[", 
+          RowBox[{"#1", ",", ".01"}], "]"}], "&"}], ")"}]}], ",", " ", 
+      RowBox[{"VertexRenderingFunction", "\[Rule]", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"Sphere", "[", 
+          RowBox[{"#1", ",", ".05"}], "]"}], "&"}], ")"}]}]}], "]"}], "&"}], 
+   ",", "X"}], "]"}]], "Input",
+ CellChangeTimes->{{3.585943054348729*^9, 3.585943074115519*^9}, {
+  3.585943196278912*^9, 3.5859432549128447`*^9}, {3.585943660804408*^9, 
+  3.585943700541157*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   Graphics3DBox[
+    TagBox[{{CylinderBox[{{0., 0., 0.}, {1., 0., 0.}}, 0.01], 
+       CylinderBox[{{0., 0., 0.}, {0.5, -0.8660254037844386, 0.}}, 0.01], 
+       CylinderBox[{{0., 0., 0.}, {
+        0.5, -0.2886751345948129, -0.816496580927726}}, 0.01], 
+       CylinderBox[{{1., 0., 0.}, {0., 0., 0.}}, 0.01], 
+       CylinderBox[{{1., 0., 0.}, {0.5, -0.8660254037844386, 0.}}, 0.01], 
+       CylinderBox[{{1., 0., 0.}, {
+        0.5, -0.2886751345948129, -0.816496580927726}}, 0.01], 
+       CylinderBox[{{1., 0., 0.}, {
+        0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}}, 
+        0.01], CylinderBox[{{0.5, -0.8660254037844386, 0.}, {0., 0., 0.}}, 
+        0.01], CylinderBox[{{0.5, -0.8660254037844386, 0.}, {1., 0., 0.}}, 
+        0.01], CylinderBox[{{0.5, -0.8660254037844386, 0.}, {
+        0.5, -0.2886751345948129, -0.816496580927726}}, 0.01], 
+       CylinderBox[{{0.5, -0.8660254037844386, 0.}, {
+        0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}}, 
+        0.01], CylinderBox[{{0.5, -0.2886751345948129, -0.816496580927726}, {
+        0., 0., 0.}}, 0.01], 
+       CylinderBox[{{0.5, -0.2886751345948129, -0.816496580927726}, {1., 0., 
+        0.}}, 0.01], 
+       CylinderBox[{{0.5, -0.2886751345948129, -0.816496580927726}, {
+        0.5, -0.8660254037844386, 0.}}, 0.01], 
+       CylinderBox[{{0.5, -0.2886751345948129, -0.816496580927726}, {
+        0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}}, 
+        0.01], CylinderBox[{{
+        0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}, {
+        1., 0., 0.}}, 0.01], 
+       CylinderBox[{{
+        0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}, {
+        0.5, -0.8660254037844386, 0.}}, 0.01], 
+       CylinderBox[{{
+        0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}, {
+        0.5, -0.2886751345948129, -0.816496580927726}}, 0.01]}, {
+       SphereBox[{0., 0., 0.}, 0.05], SphereBox[{1., 0., 0.}, 0.05], 
+       SphereBox[{0.5, -0.8660254037844386, 0.}, 0.05], 
+       SphereBox[{0.5, -0.2886751345948129, -0.816496580927726}, 0.05], 
+       SphereBox[{
+        0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}, 
+        0.05]}},
+     Annotation[#, 
+      VertexCoordinateRules -> {{0., 0., 0.}, {1., 0., 0.}, {
+       0.5, -0.8660254037844386, 0.}, {
+       0.5, -0.2886751345948129, -0.816496580927726}, {
+       0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}}]& ],
+    
+    AspectRatio->Automatic,
+    Axes->True,
+    ImageSize->{368.4453125, Automatic},
+    PlotRange->All,
+    PlotRangePadding->Scaled[0.1]], ",", 
+   Graphics3DBox[
+    TagBox[{{CylinderBox[{{0., 0., 0.}, {1., 0., 0.}}, 0.01], 
+       CylinderBox[{{0., 0., 0.}, {0.5, -0.8660254037844386, 0.}}, 0.01], 
+       CylinderBox[{{0., 0., 0.}, {
+        0.5, -0.2886751345948129, -0.816496580927726}}, 0.01], 
+       CylinderBox[{{1., 0., 0.}, {0., 0., 0.}}, 0.01], 
+       CylinderBox[{{1., 0., 0.}, {0.5, -0.8660254037844386, 0.}}, 0.01], 
+       CylinderBox[{{1., 0., 0.}, {
+        0.5, -0.2886751345948129, -0.816496580927726}}, 0.01], 
+       CylinderBox[{{1., 0., 0.}, {
+        0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}}, 
+        0.01], CylinderBox[{{0.5, -0.8660254037844386, 0.}, {0., 0., 0.}}, 
+        0.01], CylinderBox[{{0.5, -0.8660254037844386, 0.}, {1., 0., 0.}}, 
+        0.01], CylinderBox[{{0.5, -0.8660254037844386, 0.}, {
+        0.5, -0.2886751345948129, -0.816496580927726}}, 0.01], 
+       CylinderBox[{{0.5, -0.8660254037844386, 0.}, {
+        0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}}, 
+        0.01], CylinderBox[{{0.5, -0.2886751345948129, -0.816496580927726}, {
+        0., 0., 0.}}, 0.01], 
+       CylinderBox[{{0.5, -0.2886751345948129, -0.816496580927726}, {1., 0., 
+        0.}}, 0.01], 
+       CylinderBox[{{0.5, -0.2886751345948129, -0.816496580927726}, {
+        0.5, -0.8660254037844386, 0.}}, 0.01], 
+       CylinderBox[{{0.5, -0.2886751345948129, -0.816496580927726}, {
+        0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}}, 
+        0.01], CylinderBox[{{
+        0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}, {1., 
+        0., 0.}}, 0.01], 
+       CylinderBox[{{
+        0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}, {
+        0.5, -0.8660254037844386, 0.}}, 0.01], 
+       CylinderBox[{{
+        0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}, {
+        0.5, -0.2886751345948129, -0.816496580927726}}, 0.01]}, {
+       SphereBox[{0., 0., 0.}, 0.05], SphereBox[{1., 0., 0.}, 0.05], 
+       SphereBox[{0.5, -0.8660254037844386, 0.}, 0.05], 
+       SphereBox[{0.5, -0.2886751345948129, -0.816496580927726}, 0.05], 
+       SphereBox[{
+        0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}, 
+        0.05]}},
+     Annotation[#, 
+      VertexCoordinateRules -> {{0., 0., 0.}, {1., 0., 0.}, {
+       0.5, -0.8660254037844386, 0.}, {
+       0.5, -0.2886751345948129, -0.816496580927726}, {
+       0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}}]& ],
+    AspectRatio->Automatic,
+    Axes->True,
+    ImageSize->{366.37890625, Automatic},
+    PlotRange->All,
+    PlotRangePadding->Scaled[0.1]]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.5859432251360817`*^9, 3.58594325555849*^9, {3.585943665402244*^9, 
+   3.585943671024098*^9}, 3.585943705314436*^9, 3.585943775503381*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Map", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"GraphPlot3D", "[", 
+     RowBox[{"G", ",", 
+      RowBox[{"VertexLabeling", "\[Rule]", "False"}], ",", 
+      RowBox[{"VertexCoordinateRules", "\[Rule]", "#"}], ",", " ", 
+      RowBox[{"Axes", "\[Rule]", "True"}]}], "]"}], "&"}], ",", "X"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.585943610893548*^9, 3.5859436273776627`*^9}, {
+  3.585943708695315*^9, 3.5859437433350773`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   Graphics3DBox[
+    TagBox[
+     GraphicsComplex3DBox[{{0., 0., 0.}, {1., 0., 0.}, {
+      0.5, -0.8660254037844386, 0.}, {
+      0.5, -0.2886751345948129, -0.816496580927726}, {
+      0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}}, {
+       {RGBColor[0.5, 0., 0.], 
+        Line3DBox[{{1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {2, 5}, {3, 4}, {3,
+          5}, {4, 5}}]}, 
+       {RGBColor[0, 0, 0.7], Point3DBox[{1, 2, 3, 4, 5}]}}],
+     Annotation[#, 
+      VertexCoordinateRules -> {{0., 0., 0.}, {1., 0., 0.}, {
+       0.5, -0.8660254037844386, 0.}, {
+       0.5, -0.2886751345948129, -0.816496580927726}, {
+       0.3434880095055781, -0.19831289475145428`, -0.14022839267548726`}}]& ],
+    
+    AspectRatio->Automatic,
+    Axes->True,
+    ImageSize->{488.81640625, Automatic},
+    PlotRange->All,
+    PlotRangePadding->Scaled[0.1]], ",", 
+   Graphics3DBox[
+    TagBox[
+     GraphicsComplex3DBox[{{0., 0., 0.}, {1., 0., 0.}, {
+      0.5, -0.8660254037844386, 0.}, {
+      0.5, -0.2886751345948129, -0.816496580927726}, {
+      0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}}, {
+       {RGBColor[0.5, 0., 0.], 
+        Line3DBox[{{1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {2, 5}, {3, 4}, {3,
+          5}, {4, 5}}]}, 
+       {RGBColor[0, 0, 0.7], Point3DBox[{1, 2, 3, 4, 5}]}}],
+     Annotation[#, 
+      VertexCoordinateRules -> {{0., 0., 0.}, {1., 0., 0.}, {
+       0.5, -0.8660254037844386, 0.}, {
+       0.5, -0.2886751345948129, -0.816496580927726}, {
+       0.9898453238277553, -0.5714874641680467, -0.40410266127632977`}}]& ],
+    AspectRatio->Automatic,
+    Axes->True,
+    ImageSize->{459.98828125, Automatic},
+    PlotRange->All,
+    PlotRangePadding->Scaled[0.1]]}], "}"}]], "Output",
+ CellChangeTimes->{3.585943744105386*^9}]
+}, Open  ]]
+},
+WindowSize->{1109, 679},
+WindowMargins->{{1, Automatic}, {0, Automatic}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 164, 3, 28, "Input"],
+Cell[CellGroupData[{
+Cell[746, 27, 3492, 107, 199, "Input"],
+Cell[4241, 136, 3252, 68, 255, "Output"],
+Cell[7496, 206, 303, 7, 28, "Output"],
+Cell[7802, 215, 572, 12, 24, "Message"],
+Cell[8377, 229, 574, 12, 24, "Message"],
+Cell[8954, 243, 572, 12, 24, "Message"],
+Cell[9529, 257, 578, 12, 24, "Message"],
+Cell[10110, 271, 3894, 93, 237, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14041, 369, 893, 22, 46, "Input"],
+Cell[14937, 393, 5501, 106, 380, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20475, 504, 453, 11, 28, "Input"],
+Cell[20931, 517, 1816, 44, 500, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
